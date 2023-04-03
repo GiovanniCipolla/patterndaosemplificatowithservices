@@ -37,6 +37,8 @@ public class TestUser {
 //			testCercaTuttiQuelliCreatiPrimaDi(userService);
 //			System.out.println("In tabella ci sono " + userService.listAll().size() + " elementi.");
 			
+			TestAccedi(userService);
+			
 			// E TUTTI I TEST VANNO FATTI COSI'
 
 		} catch (Exception e) {
@@ -145,5 +147,18 @@ public class TestUser {
 
 		System.out.println(".......testFindAllByCreatiPrimaDi PASSED.............");
 	}
-
+	
+	private static void TestAccedi(UserService userService) throws Exception {
+		System.out.println(".......TestAccedi inizio.............");
+		
+		String login = "gio";
+		String pass = "pwd@3";
+		User result = userService.accedi(login, pass);
+		
+		System.out.println(result);
+		
+		System.out.println(".......TestAccedi PASSED.............");
+		
+	}
+	
 }

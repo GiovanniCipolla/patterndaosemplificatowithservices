@@ -273,11 +273,40 @@ public class UserDAOImpl extends AbstractMySQLDAO implements UserDAO {
 		return result;
 	}
 
-	public List findBySurnameAndNamecheIniziaCon(String cognomeInput, String inzialeNomeInput) throws Exception {
-		
+	public User signIn(String loginInput, String passwordInput) throws Exception {
 		if (isNotActive())
 			throw new Exception("Connessione non attiva. Impossibile effettuare operazioni DAO.");
 		
+		if (loginInput == null || passwordInput== null )
+			throw new Exception("TEST FAILED");
+		User temp = new User();
+		
+		try (PreparedStatement ps = connection.prepareStatement("select * from user where login = ? and password = ?")){
+			
+			ps.setString(1, loginInput);
+			ps.setString(2, passwordInput);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+			if (rs.next()) {
+				temp= new User();
+				temp.setNome(rs.getString("NOME"));
+				temp.setCognome(rs.getString("COGNOME"));
+				temp.setLogin(rs.getString("LOGIN"));
+				temp.setPassword(rs.getString("PASSWORD"));
+				temp.setDateCreated(
+						rs.getDate("DATECREATED") != null ? rs.getDate("DATECREATED").toLocalDate() : null);
+				temp.setId(rs.getLong("ID"));
+				
+			}else
+				return null;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return temp;
 	}
+
+	
 
 }

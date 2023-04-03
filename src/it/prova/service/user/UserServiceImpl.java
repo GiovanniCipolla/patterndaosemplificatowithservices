@@ -179,8 +179,8 @@ public class UserServiceImpl implements UserService {
 			userDao.setConnection(connection);
 
 			// eseguo quello che realmente devo fare
-			result=userDao.findAllByCreatiPrimaDi(dataConfronto);
-			
+			result = userDao.findAllByCreatiPrimaDi(dataConfronto);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -196,9 +196,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User accedi(String loginInput, String passwordInput) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (loginInput == null || passwordInput == null)
+		throw new Exception("Valore di input non ammesso.");
+
+		User result = new User();
+
+		try (Connection connection = MyConnection.getConnection(Constants.DRIVER_NAME, Constants.CONNECTION_URL)) {
+			// inietto la connection nel dao
+			userDao.setConnection(connection);
+
+			// eseguo quello che realmente devo fare
+			result = userDao.signIn(loginInput, passwordInput);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return result;
 	}
-
-
 }
